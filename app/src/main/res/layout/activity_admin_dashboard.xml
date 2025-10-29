@@ -4,7 +4,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:padding="16dp">
+    android:padding="16dp"
+    android:background="@android:color/background_light">
 
     <!-- Header -->
     <LinearLayout
@@ -30,7 +31,6 @@
             android:text="Logout"
             android:textSize="12sp"
             app:backgroundTint="@android:color/holo_red_light" />
-
     </LinearLayout>
 
     <!-- Quick Actions -->
@@ -42,14 +42,73 @@
         android:textStyle="bold"
         android:layout_marginBottom="12dp" />
 
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/btnAddTaxi"
+    <GridLayout
+        android:id="@+id/gridQuickActions"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Add Taxi to System"
-        android:textSize="16sp"
+        android:columnCount="2"
+        android:rowCount="2"
+        android:alignmentMode="alignMargins"
+        android:rowOrderPreserved="false"
         android:layout_marginBottom="24dp"
-        app:backgroundTint="@color/primary" />
+        android:layout_marginHorizontal="4dp">
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnManageTaxis"
+            style="?attr/materialButtonOutlinedStyle"
+            android:layout_width="0dp"
+            android:layout_height="100dp"
+            android:layout_columnWeight="1"
+            android:layout_margin="6dp"
+            app:icon="@drawable/ic_taxi"
+            app:iconGravity="textTop"
+            app:iconSize="48dp"
+            app:backgroundTint="@color/primary"
+            app:iconTint="@android:color/white"
+            android:contentDescription="Manage Taxis" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnManageRanks"
+            style="?attr/materialButtonOutlinedStyle"
+            android:layout_width="0dp"
+            android:layout_height="100dp"
+            android:layout_columnWeight="1"
+            android:layout_margin="6dp"
+            app:icon="@drawable/ic_rank"
+            app:iconGravity="textTop"
+            app:iconSize="48dp"
+            app:backgroundTint="@color/primary"
+            app:iconTint="@android:color/white"
+            android:contentDescription="Manage Rank Destinations" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnManageDrivers"
+            style="?attr/materialButtonOutlinedStyle"
+            android:layout_width="0dp"
+            android:layout_height="100dp"
+            android:layout_columnWeight="1"
+            android:layout_margin="6dp"
+            app:icon="@drawable/ic_driver"
+            app:iconGravity="textTop"
+            app:iconSize="48dp"
+            app:backgroundTint="@color/primary"
+            app:iconTint="@android:color/white"
+            android:contentDescription="Manage Drivers" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnViewAnalytics"
+            style="?attr/materialButtonOutlinedStyle"
+            android:layout_width="0dp"
+            android:layout_height="100dp"
+            android:layout_columnWeight="1"
+            android:layout_margin="6dp"
+            app:icon="@drawable/ic_analytics"
+            app:iconGravity="textTop"
+            app:iconSize="48dp"
+            app:backgroundTint="@color/primary"
+            app:iconTint="@android:color/white"
+            android:contentDescription="View Analytics" />
+    </GridLayout>
 
     <!-- Drivers List -->
     <TextView

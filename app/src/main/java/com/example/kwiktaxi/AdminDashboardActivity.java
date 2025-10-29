@@ -22,6 +22,7 @@ public class AdminDashboardActivity extends AppCompatActivity {
     private RecyclerView rvDrivers;
     private MaterialTextView tvEmptyState;
     private AuthManager authManager;
+    private MaterialButton btnManageTaxis, btnManageRanks, btnManageDrivers, btnViewAnalytics;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,7 +35,10 @@ public class AdminDashboardActivity extends AppCompatActivity {
     }
 
     private void initializeViews() {
-        btnAddTaxi = findViewById(R.id.btnAddTaxi);
+        btnViewAnalytics = findViewById(R.id.btnViewAnalytics);
+        btnManageTaxis = findViewById(R.id.btnManageTaxis);
+        btnManageRanks = findViewById(R.id.btnManageRanks);
+        btnManageDrivers = findViewById(R.id.btnManageDrivers);
         btnLogout = findViewById(R.id.btnLogout);
         rvDrivers = findViewById(R.id.rvDrivers);
         tvEmptyState = findViewById(R.id.tvEmptyState);
@@ -47,8 +51,28 @@ public class AdminDashboardActivity extends AppCompatActivity {
 
     private void setupClickListeners() {
         btnLogout.setOnClickListener(v -> performLogout());
-        btnAddTaxi.setOnClickListener(v -> addTaxiToSystem());
+
+        btnManageTaxis.setOnClickListener(v -> {
+            Intent intent = new Intent(this, ManageTaxisActivity.class);
+            startActivity(intent);
+        });
+
+        btnManageRanks.setOnClickListener(v -> {
+            Intent intent = new Intent(this, ManageRankDestinationsActivity.class);
+            startActivity(intent);
+        });
+
+        btnManageDrivers.setOnClickListener(v -> {
+            Intent intent = new Intent(this, ManageDriversActivity.class);
+            startActivity(intent);
+        });
+
+        btnViewAnalytics.setOnClickListener(v -> {
+            Intent intent = new Intent(this, ViewAnalyticsActivity.class);
+            startActivity(intent);
+        });
     }
+
 
     private void loadDrivers() {
         // Mock data for drivers
