@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.kwiktaxi.utils.AuthManager;
 import com.google.android.material.button.MaterialButton;
+import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.textview.MaterialTextView;
 
 import java.util.ArrayList;
@@ -24,6 +25,7 @@ public class AdminDashboardActivity extends AppCompatActivity {
     private AuthManager authManager;
     private MaterialButton btnManageTaxis, btnManageRanks, btnManageDrivers, btnViewAnalytics;
 
+    private MaterialCardView cardViewAnalytics, cardManageTaxis, cardManageRanks, cardManageDrivers;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -35,10 +37,11 @@ public class AdminDashboardActivity extends AppCompatActivity {
     }
 
     private void initializeViews() {
-        btnViewAnalytics = findViewById(R.id.btnViewAnalytics);
-        btnManageTaxis = findViewById(R.id.btnManageTaxis);
-        btnManageRanks = findViewById(R.id.btnManageRanks);
-        btnManageDrivers = findViewById(R.id.btnManageDrivers);
+        cardViewAnalytics = findViewById(R.id.cardViewAnalytics);
+        cardManageTaxis = findViewById(R.id.cardManageTaxis);
+        cardManageRanks = findViewById(R.id.cardManageRanks);
+        cardManageDrivers = findViewById(R.id.cardManageDrivers);
+
         btnLogout = findViewById(R.id.btnLogout);
         rvDrivers = findViewById(R.id.rvDrivers);
         tvEmptyState = findViewById(R.id.tvEmptyState);
@@ -52,22 +55,22 @@ public class AdminDashboardActivity extends AppCompatActivity {
     private void setupClickListeners() {
         btnLogout.setOnClickListener(v -> performLogout());
 
-        btnManageTaxis.setOnClickListener(v -> {
+        cardManageTaxis.setOnClickListener(v -> {
             Intent intent = new Intent(this, ManageTaxisActivity.class);
             startActivity(intent);
         });
 
-        btnManageRanks.setOnClickListener(v -> {
+        cardManageRanks.setOnClickListener(v -> {
             Intent intent = new Intent(this, ManageRankDestinationsActivity.class);
             startActivity(intent);
         });
 
-        btnManageDrivers.setOnClickListener(v -> {
+        cardManageDrivers.setOnClickListener(v -> {
             Intent intent = new Intent(this, ManageDriversActivity.class);
             startActivity(intent);
         });
 
-        btnViewAnalytics.setOnClickListener(v -> {
+        cardViewAnalytics.setOnClickListener(v -> {
             Intent intent = new Intent(this, ViewAnalyticsActivity.class);
             startActivity(intent);
         });
