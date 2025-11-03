@@ -39,4 +39,8 @@ public class RetrofitClient {
     public RankDestinationApi getRankDestinationApi() {
         return retrofit.create(RankDestinationApi.class);
     }
+
+    public TaxiApi getTaxiApi() {
+        return retrofit.create(TaxiApi.class);
+    }
 }

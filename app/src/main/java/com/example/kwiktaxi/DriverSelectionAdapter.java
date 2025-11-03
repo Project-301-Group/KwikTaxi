@@ -6,21 +6,21 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
-import com.example.kwiktaxi.models.RankResponse;
+import com.example.kwiktaxi.models.DriverResponse;
 import java.util.List;
 
-public class RankSelectionAdapter extends RecyclerView.Adapter<RankSelectionAdapter.ViewHolder> {
+public class DriverSelectionAdapter extends RecyclerView.Adapter<DriverSelectionAdapter.ViewHolder> {
 
-    private final List<RankResponse> rankList;
-    private final OnRankSelectedListener listener;
+    private final List<DriverResponse> driverList;
+    private final OnDriverSelectedListener listener;
     private int selectedPosition = RecyclerView.NO_POSITION;
 
-    public interface OnRankSelectedListener {
-        void onRankSelected(String rankId);
+    public interface OnDriverSelectedListener {
+        void onDriverSelected(int driverId);
     }
 
-    public RankSelectionAdapter(List<RankResponse> rankList, OnRankSelectedListener listener) {
-        this.rankList = rankList;
+    public DriverSelectionAdapter(List<DriverResponse> driverList, OnDriverSelectedListener listener) {
+        this.driverList = driverList;
         this.listener = listener;
     }
 
@@ -34,27 +34,34 @@ public class RankSelectionAdapter extends RecyclerView.Adapter<RankSelectionAdap
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        RankResponse rank = rankList.get(position);
-        holder.rankName.setText(rank.getName());
+        DriverResponse driver = driverList.get(position);
+        holder.driverName.setText(driver.getFullName());
         
-        // Show location (city, province)
-        String location = rank.getCity();
-        if (rank.getProvince() != null && !rank.getProvince().isEmpty()) {
-            location += (location.isEmpty() ? "" : ", ") + rank.getProvince();
+        // Show driver info (license, phone)
+        String driverInfo = driver.getLicenseNumber();
+        if (driver.getPhone() != null && !driver.getPhone().isEmpty()) {
+            driverInfo += " - " + driver.getPhone();
         }
-        holder.rankLocation.setText(location);
+        if (driver.isHasTaxi()) {
+            driverInfo += " (Has Taxi)";
+        }
+        holder.driverInfo.setText(driverInfo);
         
         // Visual feedback for selection
         boolean isSelected = selectedPosition == position;
         holder.itemView.setSelected(isSelected);
         if (isSelected) {
-            // Highlight selected item with ripple effect
             holder.itemView.setAlpha(0.8f);
         } else {
             holder.itemView.setAlpha(1.0f);
         }
         
         holder.itemView.setOnClickListener(v -> {
+            // Skip if driver already has a taxi
+            if (driver.isHasTaxi()) {
+                return;
+            }
+            
             int adapterPosition = holder.getBindingAdapterPosition();
             if (adapterPosition == RecyclerView.NO_POSITION) {
                 return;
@@ -65,13 +72,13 @@ public class RankSelectionAdapter extends RecyclerView.Adapter<RankSelectionAdap
                 notifyItemChanged(previous);
             }
             notifyItemChanged(selectedPosition);
-            listener.onRankSelected(rankList.get(adapterPosition).getIdAsString());
+            listener.onDriverSelected(driverList.get(adapterPosition).getId());
         });
     }
 
     @Override
     public int getItemCount() {
-        return rankList != null ? rankList.size() : 0;
+        return driverList != null ? driverList.size() : 0;
     }
 
     public void clearSelection() {
@@ -83,13 +90,14 @@ public class RankSelectionAdapter extends RecyclerView.Adapter<RankSelectionAdap
     }
 
     static class ViewHolder extends RecyclerView.ViewHolder {
-        TextView rankName;
-        TextView rankLocation;
+        TextView driverName;
+        TextView driverInfo;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
-            rankName = itemView.findViewById(R.id.tvRankName);
-            rankLocation = itemView.findViewById(R.id.tvRankLocation);
+            driverName = itemView.findViewById(R.id.tvRankName);
+            driverInfo = itemView.findViewById(R.id.tvRankLocation);
         }
     }
 }
+

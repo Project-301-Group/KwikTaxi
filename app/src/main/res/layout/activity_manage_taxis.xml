@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/main"
     android:orientation="vertical">
 
     <!-- App Bar -->
@@ -16,8 +16,34 @@
         app:title="Manage Taxis"
         app:navigationIcon="@drawable/baseline_arrow_back_24" />
 
-    <!-- Page content below -->
-    <FrameLayout
+    <!-- Rank Header -->
+    <TextView
+        android:id="@+id/tvRankName"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="wrap_content"
+        android:text="Rank: Loading..."
+        android:textStyle="bold"
+        android:textSize="18sp"
+        android:padding="16dp"
+        android:textColor="@android:color/black" />
+
+    <!-- RecyclerView for taxis -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvTaxis"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:padding="8dp"
+        android:clipToPadding="false" />
+
+    <!-- Floating button to add taxi -->
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fabAddTaxi"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end|bottom"
+        android:layout_margin="24dp"
+        android:contentDescription="Add taxi"
+        app:srcCompat="@drawable/baseline_arrow_back_24" />
+
 </LinearLayout>

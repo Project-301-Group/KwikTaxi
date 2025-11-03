@@ -6,21 +6,17 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
-import com.example.kwiktaxi.models.RankResponse;
+import com.example.kwiktaxi.models.RankDestinationResponse;
 import java.util.List;
 
-public class RankSelectionAdapter extends RecyclerView.Adapter<RankSelectionAdapter.ViewHolder> {
+public class RankDestinationSelectionAdapter extends RecyclerView.Adapter<RankDestinationSelectionAdapter.ViewHolder> {
 
-    private final List<RankResponse> rankList;
-    private final OnRankSelectedListener listener;
+    private final List<RankDestinationResponse> destinationList;
+    private final RankSelectionAdapter.OnRankSelectedListener listener;
     private int selectedPosition = RecyclerView.NO_POSITION;
 
-    public interface OnRankSelectedListener {
-        void onRankSelected(String rankId);
-    }
-
-    public RankSelectionAdapter(List<RankResponse> rankList, OnRankSelectedListener listener) {
-        this.rankList = rankList;
+    public RankDestinationSelectionAdapter(List<RankDestinationResponse> destinationList, RankSelectionAdapter.OnRankSelectedListener listener) {
+        this.destinationList = destinationList;
         this.listener = listener;
     }
 
@@ -34,21 +30,18 @@ public class RankSelectionAdapter extends RecyclerView.Adapter<RankSelectionAdap
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        RankResponse rank = rankList.get(position);
-        holder.rankName.setText(rank.getName());
+        RankDestinationResponse destination = destinationList.get(position);
+        holder.destinationName.setText(destination.getDestinationName());
         
-        // Show location (city, province)
-        String location = rank.getCity();
-        if (rank.getProvince() != null && !rank.getProvince().isEmpty()) {
-            location += (location.isEmpty() ? "" : ", ") + rank.getProvince();
+        String location = destination.getCity();
+        if (destination.getProvince() != null && !destination.getProvince().isEmpty()) {
+            location += (location.isEmpty() ? "" : ", ") + destination.getProvince();
         }
-        holder.rankLocation.setText(location);
+        holder.destinationLocation.setText(location);
         
-        // Visual feedback for selection
         boolean isSelected = selectedPosition == position;
         holder.itemView.setSelected(isSelected);
         if (isSelected) {
-            // Highlight selected item with ripple effect
             holder.itemView.setAlpha(0.8f);
         } else {
             holder.itemView.setAlpha(1.0f);
@@ -65,31 +58,24 @@ public class RankSelectionAdapter extends RecyclerView.Adapter<RankSelectionAdap
                 notifyItemChanged(previous);
             }
             notifyItemChanged(selectedPosition);
-            listener.onRankSelected(rankList.get(adapterPosition).getIdAsString());
+            listener.onRankSelected(String.valueOf(destinationList.get(adapterPosition).getId()));
         });
     }
 
     @Override
     public int getItemCount() {
-        return rankList != null ? rankList.size() : 0;
-    }
-
-    public void clearSelection() {
-        int previous = selectedPosition;
-        selectedPosition = RecyclerView.NO_POSITION;
-        if (previous != RecyclerView.NO_POSITION) {
-            notifyItemChanged(previous);
-        }
+        return destinationList != null ? destinationList.size() : 0;
     }
 
     static class ViewHolder extends RecyclerView.ViewHolder {
-        TextView rankName;
-        TextView rankLocation;
+        TextView destinationName;
+        TextView destinationLocation;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
-            rankName = itemView.findViewById(R.id.tvRankName);
-            rankLocation = itemView.findViewById(R.id.tvRankLocation);
+            destinationName = itemView.findViewById(R.id.tvRankName);
+            destinationLocation = itemView.findViewById(R.id.tvRankLocation);
         }
     }
 }
+

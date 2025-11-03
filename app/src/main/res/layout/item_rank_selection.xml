@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="4dp"
+    app:cardCornerRadius="8dp"
+    app:cardElevation="2dp"
+    android:background="?android:attr/selectableItemBackground"
+    android:clickable="true"
+    android:focusable="true"
+    android:foreground="?android:attr/selectableItemBackground">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="12dp"
+        android:orientation="vertical"
+        android:minHeight="56dp"
+        android:gravity="center_vertical">
+
+        <TextView
+            android:id="@+id/tvRankName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Rank Name"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/tvRankLocation"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="City, Province"
+            android:textSize="14sp"
+            android:textColor="#666666"
+            android:paddingTop="2dp" />
+
+    </LinearLayout>
+
+</androidx.cardview.widget.CardView>
+

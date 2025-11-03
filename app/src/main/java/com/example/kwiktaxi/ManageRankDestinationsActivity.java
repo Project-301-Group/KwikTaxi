@@ -12,7 +12,9 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.example.kwiktaxi.R;
 import com.example.kwiktaxi.network.RetrofitClient;
+import com.example.kwiktaxi.models.AdminDetailsResponse;
 import com.example.kwiktaxi.models.RankDestinationResponse;
+import com.example.kwiktaxi.network.ApiService;
 import com.example.kwiktaxi.network.RankDestinationApi;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.example.kwiktaxi.utils.AuthManager;
@@ -28,6 +30,7 @@ public class ManageRankDestinationsActivity extends AppCompatActivity {
     private TextView rankNameText;
     private FloatingActionButton addDestinationBtn;
     private RankDestinationApi rankApi;
+    private ApiService apiService;
     private String rankId;
     private String rankName;
     private AuthManager authManager;
@@ -44,31 +47,60 @@ public class ManageRankDestinationsActivity extends AppCompatActivity {
 
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         rankApi = RetrofitClient.getInstance().getRankDestinationApi();
+        apiService = RetrofitClient.getInstance().getApiService();
         authManager = new AuthManager(this);
 
-        // Assume rank info passed through intent
-        rankId = getIntent().getStringExtra("RANK_ID");
-        rankName = getIntent().getStringExtra("RANK_NAME");
-        rankNameText.setText(rankName);
-
+        // Load admin details to show rank name
+        loadAdminDetails();
+        
+        // Load rank destinations
         loadRankDestinations();
 
         addDestinationBtn.setOnClickListener(v -> openCreateFragment());
     }
 
+    private void loadAdminDetails() {
+        int userId = authManager.getUserId();
+        if (userId == -1) {
+            return;
+        }
+
+        apiService.getAdminDetails(userId).enqueue(new Callback<AdminDetailsResponse>() {
+            @Override
+            public void onResponse(Call<AdminDetailsResponse> call, Response<AdminDetailsResponse> response) {
+                if (response.isSuccessful() && response.body() != null && response.body().getAdmin() != null) {
+                    AdminDetailsResponse.AdminInfo admin = response.body().getAdmin();
+                    
+                    // Update rank name display
+                    String rankInfo = "Rank: " + admin.getRankName();
+                    if (admin.getCity() != null && !admin.getCity().isEmpty()) {
+                        rankInfo += " - " + admin.getCity();
+                    }
+                    if (admin.getProvince() != null && !admin.getProvince().isEmpty()) {
+                        rankInfo += ", " + admin.getProvince();
+                    }
+                    rankNameText.setText(rankInfo);
+                    
+                    // Store rank info for later use
+                    rankName = admin.getRankName();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<AdminDetailsResponse> call, Throwable t) {
+                // Show placeholder if API fails
+                rankNameText.setText("Rank: Loading...");
+            }
+        });
+    }
+
     private void loadRankDestinations() {
-        String token = authManager.getAuthToken();
-        if (token == null || token.trim().isEmpty()) {
+        int userId = authManager.getUserId();
+        if (userId == -1) {
             Toast.makeText(this, "Authentication required. Please login again.", Toast.LENGTH_SHORT).show();
             return;
         }
-        // Ensure token doesn't already have "Bearer " prefix
-        String cleanToken = token.trim();
-        if (cleanToken.startsWith("Bearer ")) {
-            cleanToken = cleanToken.substring(7).trim();
-        }
-        String authHeader = "Bearer " + cleanToken;
-        rankApi.getRankDestinations(authHeader).enqueue(new Callback<List<RankDestinationResponse>>() {
+        rankApi.getRankDestinations(userId).enqueue(new Callback<List<RankDestinationResponse>>() {
             @Override
             public void onResponse(Call<List<RankDestinationResponse>> call, Response<List<RankDestinationResponse>> response) {
                 if (response.isSuccessful() && response.body() != null) {
@@ -76,10 +108,10 @@ public class ManageRankDestinationsActivity extends AppCompatActivity {
                     recyclerView.setAdapter(adapter);
                 } else {
                     String errorMsg = "No destinations found";
-                    if (response.code() == 401) {
-                        errorMsg = "Authentication failed. Please login again.";
-                    } else if (response.code() == 422) {
-                        errorMsg = "Invalid token format. Please login again.";
+                    if (response.code() == 400) {
+                        errorMsg = "Invalid request. Please check your input.";
+                    } else if (response.code() == 404) {
+                        errorMsg = "Admin rank not found.";
                     } else if (response.errorBody() != null) {
                         try {
                             String errorBody = response.errorBody().string();
@@ -102,7 +134,8 @@ public class ManageRankDestinationsActivity extends AppCompatActivity {
     }
 
     private void openCreateFragment() {
-        CreateRankDestination fragment = CreateRankDestination.newInstance(rankId);
+        // rankId might be null if not set yet, but CreateRankDestination will handle it
+        CreateRankDestination fragment = CreateRankDestination.newInstance(rankId != null ? rankId : "");
         FragmentManager fm = getSupportFragmentManager();
         fragment.show(fm, "create_rank_dest_fragment");
     }

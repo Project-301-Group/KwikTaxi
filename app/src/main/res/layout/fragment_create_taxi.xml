@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/fragmentCreateRankDest"
+    android:id="@+id/fragmentCreateTaxi"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
@@ -8,20 +8,20 @@
 
     <!-- Title -->
     <TextView
-        android:id="@+id/tvSelectRankTitle"
+        android:id="@+id/tvSelectTaxiTitle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Select Destination Rank"
+        android:text="Create New Taxi"
         android:textStyle="bold"
         android:textSize="18sp"
         android:paddingBottom="8dp" />
 
-    <!-- Selected rank display -->
+    <!-- Selected destination display -->
     <TextView
-        android:id="@+id/tvSelectedRank"
+        android:id="@+id/tvSelectedDestination"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="No rank selected"
+        android:text="No destination selected"
         android:textSize="14sp"
         android:textColor="#666666"
         android:padding="12dp"
@@ -32,15 +32,23 @@
         android:focusable="true"
         android:foreground="?android:attr/selectableItemBackground" />
 
-    <!-- RecyclerView to show list of other ranks -->
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rvAvailableRanks"
+    <!-- Selected driver display -->
+    <TextView
+        android:id="@+id/tvSelectedDriver"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:maxHeight="200dp"
-        android:nestedScrollingEnabled="true" />
+        android:text="No driver selected"
+        android:textSize="14sp"
+        android:textColor="#666666"
+        android:padding="12dp"
+        android:background="#E3F2FD"
+        android:layout_marginBottom="8dp"
+        android:visibility="gone"
+        android:clickable="true"
+        android:focusable="true"
+        android:foreground="?android:attr/selectableItemBackground" />
 
-    <!-- Route details input -->
+    <!-- Taxi details input -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -48,33 +56,34 @@
         android:paddingTop="12dp">
 
         <EditText
-            android:id="@+id/etDistance"
+            android:id="@+id/etRegistrationNumber"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Distance (km)"
-            android:inputType="numberDecimal" />
+            android:hint="Registration Number (required)"
+            android:inputType="text" />
 
         <EditText
-            android:id="@+id/etDuration"
+            android:id="@+id/etCapacity"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Estimated duration (minutes)"
+            android:hint="Capacity (default: 4)"
             android:inputType="number" />
 
         <EditText
-            android:id="@+id/etFare"
+            android:id="@+id/etStatus"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Fare (R)"
-            android:inputType="numberDecimal" />
+            android:hint="Status (default: available)"
+            android:inputType="text" />
     </LinearLayout>
 
     <!-- Save button -->
     <Button
-        android:id="@+id/createRankDestBtn"
+        android:id="@+id/createTaxiBtn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Add Destination"
+        android:text="Create Taxi"
         android:layout_marginTop="16dp" />
 
 </LinearLayout>
+
