@@ -14,7 +14,7 @@
         android:background="?attr/colorPrimary"
         android:theme="@style/ThemeOverlay.MaterialComponents.Dark.ActionBar"
         app:title="Manage Taxis"
-        app:navigationIcon="@drawable/ic_arrow_back" />
+        app:navigationIcon="@drawable/baseline_arrow_back_24" />
 
     <!-- Page content below -->
     <FrameLayout

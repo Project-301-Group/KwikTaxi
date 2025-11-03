@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/fragmentCreateRankDest"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <!-- Title -->
+    <TextView
+        android:id="@+id/tvSelectRankTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Select Destination Rank"
+        android:textStyle="bold"
+        android:textSize="18sp"
+        android:paddingBottom="8dp" />
+
+    <!-- RecyclerView to show list of other ranks -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvAvailableRanks"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:nestedScrollingEnabled="false" />
+
+    <!-- Route details input -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingTop="12dp">
+
+        <EditText
+            android:id="@+id/etDistance"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Distance (km)"
+            android:inputType="numberDecimal" />
+
+        <EditText
+            android:id="@+id/etDuration"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Estimated duration (minutes)"
+            android:inputType="number" />
+
+        <EditText
+            android:id="@+id/etFare"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Fare (R)"
+            android:inputType="numberDecimal" />
+    </LinearLayout>
+
+    <!-- Save button -->
+    <Button
+        android:id="@+id/createRankDestBtn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Add Destination"
+        android:layout_marginTop="16dp" />
+
+</LinearLayout>

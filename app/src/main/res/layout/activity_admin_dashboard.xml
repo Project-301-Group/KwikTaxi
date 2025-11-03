@@ -45,12 +45,15 @@
             android:layout_marginBottom="24dp"
             app:cardCornerRadius="16dp"
             app:cardElevation="4dp"
-            android:padding="16dp">
+            android:padding="16dp"
+            app:contentPadding="16dp"
+            >
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                >
 
                 <TextView
                     android:id="@+id/tvAdminName"
@@ -151,14 +154,14 @@
                     <ImageView
                         android:layout_width="48dp"
                         android:layout_height="48dp"
-                        android:src="@drawable/ic_rank"
+                        android:src="@drawable/baseline_arrow_back_24"
                         app:tint="@android:color/white"
                         android:contentDescription="Manage Rank Destinations" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Manage Ranks"
+                        android:text="Rank Destinations"
                         android:textSize="16sp"
                         android:textColor="@android:color/white"
                         android:layout_marginTop="8dp" />

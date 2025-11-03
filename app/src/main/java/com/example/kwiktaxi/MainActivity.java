@@ -15,7 +15,7 @@ import com.example.kwiktaxi.utils.AuthManager;
 
 public class MainActivity extends AppCompatActivity {
 
-    private static final int SPLASH_DELAY = 2000; // 2 seconds
+    private static final int SPLASH_DELAY = 1000; // 2 seconds
     private AuthManager authManager;
 
     @Override
