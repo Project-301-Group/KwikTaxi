@@ -2,6 +2,8 @@ package com.example.kwiktaxi;
 
 import android.app.Dialog;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
@@ -85,12 +87,17 @@ public class CreateTaxiFragment extends DialogFragment
 
         createBtn.setOnClickListener(v -> createTaxi());
 
-        // Immediately prompt to select a driver on open
-        showDriverSelectionDialog();
 
         AlertDialog.Builder builder = new AlertDialog.Builder(requireActivity());
         builder.setView(view);
         return builder.create();
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        // Ensure the base dialog is visible first, then show the driver selection on top
+        new Handler(Looper.getMainLooper()).post(this::showDriverSelectionDialog);
     }
 
     private void loadRankId() {
