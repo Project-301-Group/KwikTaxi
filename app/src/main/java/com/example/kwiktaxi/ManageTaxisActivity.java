@@ -2,6 +2,7 @@ package com.example.kwiktaxi;
 
 import android.os.Bundle;
 import android.widget.TextView;
+import android.view.View;
 import android.widget.Toast;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -25,6 +26,7 @@ public class ManageTaxisActivity extends AppCompatActivity {
     private RecyclerView recyclerView;
     private TaxiAdapter adapter;
     private TextView rankNameText;
+    private TextView tvEmptyTaxis;
     private FloatingActionButton addTaxiBtn;
     private TaxiApi taxiApi;
     private ApiService apiService;
@@ -38,6 +40,7 @@ public class ManageTaxisActivity extends AppCompatActivity {
         setContentView(R.layout.activity_manage_taxis);
 
         rankNameText = findViewById(R.id.tvRankName);
+        tvEmptyTaxis = findViewById(R.id.tvEmptyTaxis);
         recyclerView = findViewById(R.id.rvTaxis);
         addTaxiBtn = findViewById(R.id.fabAddTaxi);
 
@@ -99,8 +102,14 @@ public class ManageTaxisActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<List<TaxiResponse>> call, Response<List<TaxiResponse>> response) {
                 if (response.isSuccessful() && response.body() != null) {
-                    adapter = new TaxiAdapter(response.body());
+                    List<TaxiResponse> taxis = response.body();
+                    adapter = new TaxiAdapter(taxis);
                     recyclerView.setAdapter(adapter);
+                    if (taxis.isEmpty()) {
+                        tvEmptyTaxis.setVisibility(View.VISIBLE);
+                    } else {
+                        tvEmptyTaxis.setVisibility(View.GONE);
+                    }
                 } else {
                     String errorMsg = "No taxis found";
                     if (response.code() == 400) {
@@ -118,6 +127,7 @@ public class ManageTaxisActivity extends AppCompatActivity {
                         }
                     }
                     Toast.makeText(ManageTaxisActivity.this, errorMsg, Toast.LENGTH_LONG).show();
+                    tvEmptyTaxis.setVisibility(View.VISIBLE);
                 }
             }
 

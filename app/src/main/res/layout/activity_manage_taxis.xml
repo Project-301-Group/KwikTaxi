@@ -27,6 +27,19 @@
         android:padding="16dp"
         android:textColor="@android:color/black" />
 
+    <!-- Empty state under rank name when there are no taxis -->
+    <TextView
+        android:id="@+id/tvEmptyTaxis"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="No taxis yet at this rank"
+        android:textSize="14sp"
+        android:textColor="#666666"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp"
+        android:paddingBottom="8dp"
+        android:visibility="gone" />
+
     <!-- RecyclerView for taxis -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvTaxis"

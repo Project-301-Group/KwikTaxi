@@ -85,6 +85,9 @@ public class CreateTaxiFragment extends DialogFragment
 
         createBtn.setOnClickListener(v -> createTaxi());
 
+        // Immediately prompt to select a driver on open
+        showDriverSelectionDialog();
+
         AlertDialog.Builder builder = new AlertDialog.Builder(requireActivity());
         builder.setView(view);
         return builder.create();
@@ -249,6 +252,8 @@ public class CreateTaxiFragment extends DialogFragment
                 selectedDriverId = driverId;
                 tvSelectedDriver.setText("Selected: " + driver.getFullName() + " (" + driver.getLicenseNumber() + ")");
                 tvSelectedDriver.setVisibility(View.VISIBLE);
+                // After selecting driver, prompt for destination
+                showDestinationSelectionDialog();
                 break;
             }
         }
