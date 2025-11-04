@@ -300,56 +300,40 @@ public class CreateTaxiFragment extends DialogFragment
             return;
         }
 
-        // Get rank_id from admin details
-        int finalCapacity = capacity;
-        String finalStatus = status;
-        apiService.getAdminDetails(userId).enqueue(new Callback<AdminDetailsResponse>() {
+        // Build request with user_id (backend expects user_id instead of rank_id)
+        TaxiRequest request = new TaxiRequest(
+                registrationNumber,
+                capacity,
+                status,
+                userId,
+                selectedDriverId
+        );
+
+        taxiApi.createTaxi(request).enqueue(new Callback<TaxiResponse>() {
             @Override
-            public void onResponse(Call<AdminDetailsResponse> call, Response<AdminDetailsResponse> response) {
-                if (response.isSuccessful() && response.body() != null && response.body().getAdmin() != null) {
-                    // Create taxi request
-                    // rank_id is optional - backend will infer it from admin's user_id
-                    TaxiRequest request = new TaxiRequest(
-                            registrationNumber,
-                            finalCapacity,
-                            finalStatus,
-                            null, // rank_id will be auto-assigned by backend from admin
-                            selectedDriverId
-                    );
-
-                    taxiApi.createTaxi(request).enqueue(new Callback<TaxiResponse>() {
-                        @Override
-                        public void onResponse(Call<TaxiResponse> call, Response<TaxiResponse> response) {
-                            if (response.isSuccessful()) {
-                                Toast.makeText(getContext(), "Taxi created successfully!", Toast.LENGTH_SHORT).show();
-                                dismiss();
-                            } else {
-                                String errorMsg = "Failed to create taxi";
-                                if (response.errorBody() != null) {
-                                    try {
-                                        String errorBody = response.errorBody().string();
-                                        if (errorBody != null && !errorBody.trim().isEmpty()) {
-                                            errorMsg = "Error: " + errorBody;
-                                        }
-                                    } catch (Exception e) {
-                                        errorMsg = "Error code: " + response.code();
-                                    }
-                                }
-                                Toast.makeText(getContext(), errorMsg, Toast.LENGTH_LONG).show();
+            public void onResponse(Call<TaxiResponse> call, Response<TaxiResponse> response) {
+                if (response.isSuccessful()) {
+                    Toast.makeText(getContext(), "Taxi created successfully!", Toast.LENGTH_SHORT).show();
+                    dismiss();
+                } else {
+                    String errorMsg = "Failed to create taxi";
+                    if (response.errorBody() != null) {
+                        try {
+                            String errorBody = response.errorBody().string();
+                            if (errorBody != null && !errorBody.trim().isEmpty()) {
+                                errorMsg = "Error: " + errorBody;
                             }
+                        } catch (Exception e) {
+                            errorMsg = "Error code: " + response.code();
                         }
-
-                        @Override
-                        public void onFailure(Call<TaxiResponse> call, Throwable t) {
-                            Toast.makeText(getContext(), "Error: " + t.getMessage(), Toast.LENGTH_LONG).show();
-                        }
-                    });
+                    }
+                    Toast.makeText(getContext(), errorMsg, Toast.LENGTH_LONG).show();
                 }
             }
 
             @Override
-            public void onFailure(Call<AdminDetailsResponse> call, Throwable t) {
-                Toast.makeText(getContext(), "Failed to get rank info", Toast.LENGTH_SHORT).show();
+            public void onFailure(Call<TaxiResponse> call, Throwable t) {
+                Toast.makeText(getContext(), "Error: " + t.getMessage(), Toast.LENGTH_LONG).show();
             }
         });
     }
