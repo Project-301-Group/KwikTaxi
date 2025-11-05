@@ -4,9 +4,9 @@ import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
-
+//199.168.6.108
 public class RetrofitClient {
-    private static final String BASE_URL = "http://199.168.6.108:5000/"; // Flask server URL
+    private static final String BASE_URL = "http://192.168.0.173:5000/"; // Flask server URL
     private static RetrofitClient instance;
     private Retrofit retrofit;
 
