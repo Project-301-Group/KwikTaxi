@@ -54,6 +54,15 @@
         <activity
             android:name=".AdminDashboardActivity"
             android:exported="false" />
+        <activity
+            android:name=".TaxiDetailActivity"
+            android:exported="false" />
+        <activity
+            android:name=".TripCreateActivity"
+            android:exported="false" />
+        <activity
+            android:name=".TripQrActivity"
+            android:exported="false" />
     </application>
 
 </manifest>

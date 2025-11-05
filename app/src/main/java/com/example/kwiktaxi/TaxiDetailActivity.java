@@ -33,6 +33,11 @@ public class TaxiDetailActivity extends AppCompatActivity {
         setContentView(R.layout.activity_taxi_detail);
 
         taxiId = getIntent().getIntExtra("taxi_id", -1);
+        if (taxiId == -1) {
+            Toast.makeText(this, "Missing taxi id", Toast.LENGTH_SHORT).show();
+            finish();
+            return;
+        }
         driverApi = RetrofitClient.getInstance().getDriverApi();
         authManager = new AuthManager(this);
 
