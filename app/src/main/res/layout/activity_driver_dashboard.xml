@@ -56,6 +56,22 @@
                 android:layout_marginBottom="8dp" />
 
             <TextView
+                android:id="@+id/tvDriverName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:textColor="@android:color/black" />
+
+            <TextView
+                android:id="@+id/tvDriverPhone"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="14sp"
+                android:textColor="@android:color/darker_gray"
+                android:layout_marginBottom="8dp" />
+
+            <TextView
                 android:id="@+id/tvTaxiStatus"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

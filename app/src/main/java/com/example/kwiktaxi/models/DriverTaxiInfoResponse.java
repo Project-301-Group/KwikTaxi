@@ -4,6 +4,7 @@ import java.util.List;
 
 public class DriverTaxiInfoResponse {
     private Taxi taxi;
+    private Driver driver;
 
     public Taxi getTaxi() {
         return taxi;
@@ -12,6 +13,9 @@ public class DriverTaxiInfoResponse {
     public void setTaxi(Taxi taxi) {
         this.taxi = taxi;
     }
+
+    public Driver getDriver() { return driver; }
+    public void setDriver(Driver driver) { this.driver = driver; }
 
     public static class Taxi {
         private int id;
@@ -59,6 +63,23 @@ public class DriverTaxiInfoResponse {
         public int getEstimated_duration() { return estimated_duration; }
         public double getFare() { return fare; }
         public boolean isActive() { return active; }
+    }
+
+    public static class Driver {
+        private int id;
+        private String firstname;
+        private String lastname;
+        private String phone;
+
+        public int getId() { return id; }
+        public String getFirstname() { return firstname; }
+        public String getLastname() { return lastname; }
+        public String getPhone() { return phone; }
+        public String getFullName() {
+            String fn = firstname == null ? "" : firstname;
+            String ln = lastname == null ? "" : lastname;
+            return (fn + " " + ln).trim();
+        }
     }
 }
 
