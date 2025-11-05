@@ -29,15 +29,13 @@ public class TaxiAdapter extends RecyclerView.Adapter<TaxiAdapter.ViewHolder> {
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         TaxiResponse taxi = taxiList.get(position);
         holder.taxiRegNumber.setText("Registration: " + taxi.getRegistrationNumber());
-        
-        if (taxi.getDriver() != null) {
-            holder.taxiDriver.setText("Driver: " + taxi.getDriver().getFullName());
-        } else {
-            holder.taxiDriver.setText("Driver: Not assigned");
-        }
-        
+
+        String driverText = (taxi.getDriver() != null && taxi.getDriver().getFullName() != null)
+                ? ("Driver: " + taxi.getDriver().getFullName())
+                : "Driver: Not assigned";
+        holder.taxiDetails.setText(driverText + " • Capacity: " + taxi.getCapacity());
+
         holder.taxiStatus.setText("Status: " + taxi.getStatus());
-        holder.taxiCapacity.setText("Capacity: " + taxi.getCapacity());
     }
 
     @Override
@@ -47,16 +45,14 @@ public class TaxiAdapter extends RecyclerView.Adapter<TaxiAdapter.ViewHolder> {
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         TextView taxiRegNumber;
-        TextView taxiDriver;
+        TextView taxiDetails;
         TextView taxiStatus;
-        TextView taxiCapacity;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             taxiRegNumber = itemView.findViewById(R.id.tvDestinationName);
-            taxiDriver = itemView.findViewById(R.id.tvFare);
+            taxiDetails = itemView.findViewById(R.id.tvDetails);
             taxiStatus = itemView.findViewById(R.id.tvStatus);
-            taxiCapacity = itemView.findViewById(R.id.tvStatus); // Will use status for now
         }
     }
 }
