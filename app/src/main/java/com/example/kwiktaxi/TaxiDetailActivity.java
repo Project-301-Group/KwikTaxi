@@ -17,6 +17,7 @@ import com.example.kwiktaxi.network.RetrofitClient;
 import com.example.kwiktaxi.utils.AuthManager;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textview.MaterialTextView;
+import com.google.android.material.appbar.MaterialToolbar;
 
 public class TaxiDetailActivity extends AppCompatActivity {
 
@@ -40,6 +41,11 @@ public class TaxiDetailActivity extends AppCompatActivity {
         }
         driverApi = RetrofitClient.getInstance().getDriverApi();
         authManager = new AuthManager(this);
+
+        MaterialToolbar topAppBar = findViewById(R.id.topAppBar);
+        if (topAppBar != null) {
+            topAppBar.setNavigationOnClickListener(v -> finish());
+        }
 
         tvHeader = findViewById(R.id.tvHeader);
         tvRank = findViewById(R.id.tvRank);

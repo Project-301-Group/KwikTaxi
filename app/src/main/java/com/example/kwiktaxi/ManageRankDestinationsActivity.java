@@ -17,6 +17,7 @@ import com.example.kwiktaxi.models.RankDestinationResponse;
 import com.example.kwiktaxi.network.ApiService;
 import com.example.kwiktaxi.network.RankDestinationApi;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.appbar.MaterialToolbar;
 import com.example.kwiktaxi.utils.AuthManager;
 import java.util.List;
 import retrofit2.Call;
@@ -39,6 +40,11 @@ public class ManageRankDestinationsActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_manage_rank_destinations);
+
+        MaterialToolbar topAppBar = findViewById(R.id.topAppBar);
+        if (topAppBar != null) {
+            topAppBar.setNavigationOnClickListener(v -> finish());
+        }
 
         rankNameText = findViewById(R.id.tvRankName);
         recyclerView = findViewById(R.id.rvRankDestinations);

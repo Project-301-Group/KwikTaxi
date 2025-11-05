@@ -16,6 +16,7 @@ import com.example.kwiktaxi.network.RetrofitClient;
 import com.example.kwiktaxi.network.TaxiApi;
 import com.example.kwiktaxi.utils.AuthManager;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.appbar.MaterialToolbar;
 import java.util.List;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -38,6 +39,11 @@ public class ManageTaxisActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_manage_taxis);
+
+        MaterialToolbar topAppBar = findViewById(R.id.topAppBar);
+        if (topAppBar != null) {
+            topAppBar.setNavigationOnClickListener(v -> finish());
+        }
 
         rankNameText = findViewById(R.id.tvRankName);
         tvEmptyTaxis = findViewById(R.id.tvEmptyTaxis);
