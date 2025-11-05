@@ -9,24 +9,32 @@ public class PassengerRankDestinationsResponse {
 
     public static class Destination {
         private int id;
-        private Integer origin_rank_id;
-        private String origin_rank_name;
-        private String destination_rank_id;
-        private String destination_name;
+        private Rank origin_rank;
+        private Rank destination_rank;
         private double distance_km;
         private int estimated_duration;
         private double fare;
         private boolean active;
 
         public int getId() { return id; }
-        public Integer getOrigin_rank_id() { return origin_rank_id; }
-        public String getOrigin_rank_name() { return origin_rank_name; }
-        public String getDestination_rank_id() { return destination_rank_id; }
-        public String getDestination_name() { return destination_name; }
+        public Rank getOrigin_rank() { return origin_rank; }
+        public Rank getDestination_rank() { return destination_rank; }
         public double getDistance_km() { return distance_km; }
         public int getEstimated_duration() { return estimated_duration; }
         public double getFare() { return fare; }
         public boolean isActive() { return active; }
+    }
+
+    public static class Rank {
+        private Integer id;
+        private String name;
+        private String city;
+        private String province;
+
+        public Integer getId() { return id; }
+        public String getName() { return name; }
+        public String getCity() { return city; }
+        public String getProvince() { return province; }
     }
 }
 

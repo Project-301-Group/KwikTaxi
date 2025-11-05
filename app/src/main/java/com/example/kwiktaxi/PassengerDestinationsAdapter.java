@@ -33,12 +33,40 @@ public class PassengerDestinationsAdapter extends RecyclerView.Adapter<Passenger
     @Override
     public void onBindViewHolder(@NonNull VH holder, int position) {
         PassengerRankDestinationsResponse.Destination d = items.get(position);
-        String route = "";
-        if (d.getOrigin_rank_name() != null) {
-            route = d.getOrigin_rank_name() + " → ";
+        
+        // Origin Rank
+        if (d.getOrigin_rank() != null && d.getOrigin_rank().getName() != null) {
+            holder.tvOriginRank.setText(d.getOrigin_rank().getName());
+            String originLoc = "";
+            if (d.getOrigin_rank().getCity() != null && !d.getOrigin_rank().getCity().isEmpty()) {
+                originLoc = d.getOrigin_rank().getCity();
+            }
+            if (d.getOrigin_rank().getProvince() != null && !d.getOrigin_rank().getProvince().isEmpty()) {
+                originLoc += (originLoc.isEmpty() ? "" : ", ") + d.getOrigin_rank().getProvince();
+            }
+            holder.tvOriginLocation.setText(originLoc.isEmpty() ? "" : originLoc);
+        } else {
+            holder.tvOriginRank.setText("Unknown Origin");
+            holder.tvOriginLocation.setText("");
         }
-        route += d.getDestination_name();
-        holder.tvName.setText(route);
+        
+        // Destination Rank
+        if (d.getDestination_rank() != null && d.getDestination_rank().getName() != null) {
+            holder.tvDestinationRank.setText(d.getDestination_rank().getName());
+            String destLoc = "";
+            if (d.getDestination_rank().getCity() != null && !d.getDestination_rank().getCity().isEmpty()) {
+                destLoc = d.getDestination_rank().getCity();
+            }
+            if (d.getDestination_rank().getProvince() != null && !d.getDestination_rank().getProvince().isEmpty()) {
+                destLoc += (destLoc.isEmpty() ? "" : ", ") + d.getDestination_rank().getProvince();
+            }
+            holder.tvDestinationLocation.setText(destLoc.isEmpty() ? "" : destLoc);
+        } else {
+            holder.tvDestinationRank.setText("Unknown Destination");
+            holder.tvDestinationLocation.setText("");
+        }
+        
+        // Route Details
         holder.tvDetails.setText("Fare: R" + d.getFare() + " • " + d.getDistance_km() + "km • " + d.getEstimated_duration() + "min");
         holder.itemView.setOnClickListener(v -> onDestinationClick.onClick(d));
     }
@@ -47,10 +75,13 @@ public class PassengerDestinationsAdapter extends RecyclerView.Adapter<Passenger
     public int getItemCount() { return items == null ? 0 : items.size(); }
 
     static class VH extends RecyclerView.ViewHolder {
-        TextView tvName, tvDetails;
+        TextView tvOriginRank, tvOriginLocation, tvDestinationRank, tvDestinationLocation, tvDetails;
         VH(@NonNull View itemView) {
             super(itemView);
-            tvName = itemView.findViewById(R.id.tvName);
+            tvOriginRank = itemView.findViewById(R.id.tvOriginRank);
+            tvOriginLocation = itemView.findViewById(R.id.tvOriginLocation);
+            tvDestinationRank = itemView.findViewById(R.id.tvDestinationRank);
+            tvDestinationLocation = itemView.findViewById(R.id.tvDestinationLocation);
             tvDetails = itemView.findViewById(R.id.tvDetails);
         }
     }
