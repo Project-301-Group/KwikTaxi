@@ -47,4 +47,8 @@ public class RetrofitClient {
     public DriverApi getDriverApi() {
         return retrofit.create(DriverApi.class);
     }
+
+    public PassengerApi getPassengerApi() {
+        return retrofit.create(PassengerApi.class);
+    }
 }

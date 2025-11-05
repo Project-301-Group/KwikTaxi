@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.CAMERA" />
 
     <application
         android:allowBackup="true"
@@ -62,6 +63,9 @@
             android:exported="false" />
         <activity
             android:name=".TripQrActivity"
+            android:exported="false" />
+        <activity
+            android:name=".PassengerTripsActivity"
             android:exported="false" />
     </application>
 
