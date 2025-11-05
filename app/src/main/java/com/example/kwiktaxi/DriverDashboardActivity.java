@@ -7,6 +7,9 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.kwiktaxi.models.DriverTaxiInfoResponse;
+import com.example.kwiktaxi.network.DriverApi;
+import com.example.kwiktaxi.network.RetrofitClient;
 import com.example.kwiktaxi.utils.AuthManager;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textview.MaterialTextView;
@@ -17,6 +20,8 @@ public class DriverDashboardActivity extends AppCompatActivity {
     private MaterialButton btnGoOnline, btnGoOffline, btnLogout;
     private AuthManager authManager;
     private boolean isOnline = false;
+    private DriverApi driverApi;
+    private DriverTaxiInfoResponse.Taxi myTaxi;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,6 +31,7 @@ public class DriverDashboardActivity extends AppCompatActivity {
         initializeViews();
         setupClickListeners();
         loadDriverStatus();
+        loadMyTaxi();
     }
 
     private void initializeViews() {
@@ -35,12 +41,20 @@ public class DriverDashboardActivity extends AppCompatActivity {
         btnLogout = findViewById(R.id.btnLogout);
         
         authManager = new AuthManager(this);
+        driverApi = RetrofitClient.getInstance().getDriverApi();
     }
 
     private void setupClickListeners() {
         btnLogout.setOnClickListener(v -> performLogout());
         btnGoOnline.setOnClickListener(v -> goOnline());
         btnGoOffline.setOnClickListener(v -> goOffline());
+        tvTaxiStatus.setOnClickListener(v -> {
+            if (myTaxi != null) {
+                Intent intent = new Intent(this, TaxiDetailActivity.class);
+                intent.putExtra("taxi_id", myTaxi.getId());
+                startActivity(intent);
+            }
+        });
     }
 
     private void loadDriverStatus() {
@@ -51,6 +65,30 @@ public class DriverDashboardActivity extends AppCompatActivity {
         // Disable online/offline buttons since no taxi is assigned
         btnGoOnline.setEnabled(false);
         btnGoOffline.setEnabled(false);
+    }
+
+    private void loadMyTaxi() {
+        int userId = authManager.getUserId();
+        if (userId == -1) return;
+        driverApi.getDriverTaxi(userId).enqueue(new retrofit2.Callback<DriverTaxiInfoResponse>() {
+            @Override
+            public void onResponse(retrofit2.Call<DriverTaxiInfoResponse> call, retrofit2.Response<DriverTaxiInfoResponse> response) {
+                if (response.isSuccessful() && response.body() != null && response.body().getTaxi() != null) {
+                    myTaxi = response.body().getTaxi();
+                    String status = myTaxi.getRegistration_number() + " (" + myTaxi.getStatus() + ")\n" +
+                            (myTaxi.getRank() != null ? myTaxi.getRank().getName() : "");
+                    tvTaxiStatus.setText(status + "\nTap for details");
+                    btnGoOnline.setEnabled(true);
+                } else {
+                    tvTaxiStatus.setText("No taxis assigned");
+                }
+            }
+
+            @Override
+            public void onFailure(retrofit2.Call<DriverTaxiInfoResponse> call, Throwable t) {
+                Toast.makeText(DriverDashboardActivity.this, "Failed to load taxi", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     private void goOnline() {
