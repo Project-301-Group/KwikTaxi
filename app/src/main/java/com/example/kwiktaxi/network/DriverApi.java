@@ -3,6 +3,8 @@ package com.example.kwiktaxi.network;
 import com.example.kwiktaxi.models.DriverTaxiInfoResponse;
 import com.example.kwiktaxi.models.TripCreateRequest;
 import com.example.kwiktaxi.models.TripCreateResponse;
+import com.example.kwiktaxi.models.TripQrResponse;
+import com.example.kwiktaxi.models.ActiveTripsResponse;
 import com.example.kwiktaxi.models.TripPassengersResponse;
 import com.example.kwiktaxi.models.TripScanRequest;
 
@@ -28,5 +30,11 @@ public interface DriverApi {
 
     @GET("driver/taxi/passengers")
     Call<TripPassengersResponse> getActiveTripPassengers(@Query("taxi_id") int taxiId);
+
+    @GET("driver/trip/qr")
+    Call<TripQrResponse> getActiveTripQr(@Query("user_id") int userId);
+
+    @GET("driver/trips/active")
+    Call<ActiveTripsResponse> getActiveTrips(@Query("user_id") Integer userId);
 }
 

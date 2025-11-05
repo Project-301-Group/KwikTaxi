@@ -106,6 +106,27 @@
             android:layout_height="wrap_content"
             android:nestedScrollingEnabled="true" />
 
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Active Trips"
+            android:textStyle="bold"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="8dp" />
+
+        <Button
+            android:id="@+id/btnRefreshActiveTrips"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Refresh Active Trips"
+            android:layout_marginBottom="8dp" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvActiveTrips"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:nestedScrollingEnabled="true" />
+
         </LinearLayout>
     </ScrollView>
 

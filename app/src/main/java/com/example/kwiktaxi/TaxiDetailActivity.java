@@ -22,8 +22,8 @@ import com.google.android.material.appbar.MaterialToolbar;
 public class TaxiDetailActivity extends AppCompatActivity {
 
     private MaterialTextView tvHeader, tvRank, tvCapacity, tvStatus;
-    private RecyclerView rvDestinations, rvPassengers;
-    private MaterialButton btnCreateTrip, btnRefreshPassengers;
+    private RecyclerView rvDestinations, rvPassengers, rvActiveTrips;
+    private MaterialButton btnCreateTrip, btnRefreshPassengers, btnRefreshActiveTrips;
     private int taxiId;
     private DriverApi driverApi;
     private AuthManager authManager;
@@ -53,16 +53,20 @@ public class TaxiDetailActivity extends AppCompatActivity {
         tvStatus = findViewById(R.id.tvStatus);
         rvDestinations = findViewById(R.id.rvDestinations);
         rvPassengers = findViewById(R.id.rvPassengers);
+        rvActiveTrips = findViewById(R.id.rvActiveTrips);
         btnCreateTrip = findViewById(R.id.btnCreateTrip);
         btnRefreshPassengers = findViewById(R.id.btnRefreshPassengers);
+        btnRefreshActiveTrips = findViewById(R.id.btnRefreshActiveTrips);
 
         rvDestinations.setLayoutManager(new LinearLayoutManager(this));
         rvPassengers.setLayoutManager(new LinearLayoutManager(this));
+        rvActiveTrips.setLayoutManager(new LinearLayoutManager(this));
 
         loadTaxi();
 
         btnCreateTrip.setOnClickListener(v -> openCreateTrip());
         btnRefreshPassengers.setOnClickListener(v -> loadPassengers());
+        btnRefreshActiveTrips.setOnClickListener(v -> loadActiveTrips());
     }
 
     private void loadTaxi() {
@@ -108,6 +112,46 @@ public class TaxiDetailActivity extends AppCompatActivity {
             @Override
             public void onFailure(retrofit2.Call<TripPassengersResponse> call, Throwable t) {
                 Toast.makeText(TaxiDetailActivity.this, "Failed to load passengers", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void loadActiveTrips() {
+        Integer userId = new AuthManager(this).getUserId();
+        driverApi.getActiveTrips(userId).enqueue(new retrofit2.Callback<com.example.kwiktaxi.models.ActiveTripsResponse>() {
+            @Override
+            public void onResponse(retrofit2.Call<com.example.kwiktaxi.models.ActiveTripsResponse> call, retrofit2.Response<com.example.kwiktaxi.models.ActiveTripsResponse> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    rvActiveTrips.setAdapter(new ActiveTripsAdapter(response.body().getActive_trips(), () -> fetchAndShowQr()));
+                }
+            }
+
+            @Override
+            public void onFailure(retrofit2.Call<com.example.kwiktaxi.models.ActiveTripsResponse> call, Throwable t) {
+                Toast.makeText(TaxiDetailActivity.this, "Failed to load active trips", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void fetchAndShowQr() {
+        int userId = authManager.getUserId();
+        driverApi.getActiveTripQr(userId).enqueue(new retrofit2.Callback<com.example.kwiktaxi.models.TripQrResponse>() {
+            @Override
+            public void onResponse(retrofit2.Call<com.example.kwiktaxi.models.TripQrResponse> call, retrofit2.Response<com.example.kwiktaxi.models.TripQrResponse> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    Intent intent = new Intent(TaxiDetailActivity.this, TripQrActivity.class);
+                    intent.putExtra("qr_base64", response.body().getQr_code());
+                    intent.putExtra("taxi_id", response.body().getTaxi_id());
+                    intent.putExtra("trip_id", response.body().getTrip_id());
+                    startActivity(intent);
+                } else {
+                    Toast.makeText(TaxiDetailActivity.this, "No active trip found", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(retrofit2.Call<com.example.kwiktaxi.models.TripQrResponse> call, Throwable t) {
+                Toast.makeText(TaxiDetailActivity.this, "Failed to retrieve QR", Toast.LENGTH_SHORT).show();
             }
         });
     }
