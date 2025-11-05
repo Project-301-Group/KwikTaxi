@@ -80,6 +80,14 @@ public class CreateRankDestination extends DialogFragment implements RankSelecti
         return builder.create();
     }
 
+    @Override
+    public void onDismiss(@NonNull android.content.DialogInterface dialog) {
+        super.onDismiss(dialog);
+        if (getActivity() instanceof ManageRankDestinationsActivity) {
+            ((ManageRankDestinationsActivity) getActivity()).loadRankDestinations();
+        }
+    }
+
     private void loadAvailableRanks() {
         int userId = authManager.getUserId();
         if (userId == -1) {

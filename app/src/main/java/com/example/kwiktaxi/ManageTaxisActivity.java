@@ -98,7 +98,7 @@ public class ManageTaxisActivity extends AppCompatActivity {
         });
     }
 
-    private void loadTaxis() {
+    public void loadTaxis() {
         int userId = authManager.getUserId();
         if (userId == -1) {
             Toast.makeText(this, "Authentication required. Please login again.", Toast.LENGTH_SHORT).show();

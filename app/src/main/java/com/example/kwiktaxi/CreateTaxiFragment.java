@@ -94,6 +94,14 @@ public class CreateTaxiFragment extends DialogFragment
     }
 
     @Override
+    public void onDismiss(@NonNull android.content.DialogInterface dialog) {
+        super.onDismiss(dialog);
+        if (getActivity() instanceof ManageTaxisActivity) {
+            ((ManageTaxisActivity) getActivity()).loadTaxis();
+        }
+    }
+
+    @Override
     public void onStart() {
         super.onStart();
         // Ensure the base dialog is visible first, then show the driver selection on top

@@ -100,7 +100,7 @@ public class ManageRankDestinationsActivity extends AppCompatActivity {
         });
     }
 
-    private void loadRankDestinations() {
+    public void loadRankDestinations() {
         int userId = authManager.getUserId();
         if (userId == -1) {
             Toast.makeText(this, "Authentication required. Please login again.", Toast.LENGTH_SHORT).show();
