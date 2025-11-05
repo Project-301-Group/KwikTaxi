@@ -22,10 +22,9 @@
             android:textStyle="bold" />
 
         <TextView
-            android:id="@+id/tvFare"
+            android:id="@+id/tvDetails"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Fare: R12.50"
             android:textSize="14sp"
             android:paddingTop="2dp" />
 
@@ -33,8 +32,6 @@
             android:id="@+id/tvStatus"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Active"
-            android:textColor="@android:color/holo_green_dark"
             android:textSize="13sp"
             android:paddingTop="2dp" />
 
