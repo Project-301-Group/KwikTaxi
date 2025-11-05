@@ -6,7 +6,7 @@ public class TripScanRequest {
 
     public TripScanRequest(String qr_code, Passenger passenger) {
         this.qr_code = qr_code;
-        this.passen ger = passenger;
+        this.passenger = passenger;
     }
 
     public static class Passenger {
