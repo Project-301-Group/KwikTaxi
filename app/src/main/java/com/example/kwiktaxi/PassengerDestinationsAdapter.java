@@ -33,7 +33,12 @@ public class PassengerDestinationsAdapter extends RecyclerView.Adapter<Passenger
     @Override
     public void onBindViewHolder(@NonNull VH holder, int position) {
         PassengerRankDestinationsResponse.Destination d = items.get(position);
-        holder.tvName.setText(d.getDestination_name());
+        String route = "";
+        if (d.getOrigin_rank_name() != null) {
+            route = d.getOrigin_rank_name() + " → ";
+        }
+        route += d.getDestination_name();
+        holder.tvName.setText(route);
         holder.tvDetails.setText("Fare: R" + d.getFare() + " • " + d.getDistance_km() + "km • " + d.getEstimated_duration() + "min");
         holder.itemView.setOnClickListener(v -> onDestinationClick.onClick(d));
     }

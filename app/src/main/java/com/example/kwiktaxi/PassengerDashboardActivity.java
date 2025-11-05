@@ -123,44 +123,22 @@ public class PassengerDashboardActivity extends AppCompatActivity {
     }
 
     private void loadAllDestinations() {
-        // Load all destinations by fetching all ranks and their destinations
-        passengerApi.getRanks(null).enqueue(new retrofit2.Callback<PassengerRanksResponse>() {
+        // Load all destinations directly (no rank_id needed)
+        passengerApi.getRankDestinations(null, null).enqueue(new retrofit2.Callback<PassengerRankDestinationsResponse>() {
             @Override
-            public void onResponse(retrofit2.Call<PassengerRanksResponse> call, retrofit2.Response<PassengerRanksResponse> response) {
+            public void onResponse(retrofit2.Call<PassengerRankDestinationsResponse> call, retrofit2.Response<PassengerRankDestinationsResponse> response) {
                 if (response.isSuccessful() && response.body() != null) {
-                    destinationsList.clear();
-                    List<PassengerRanksResponse.Rank> ranks = response.body().getRanks();
-                    loadDestinationsForRanks(ranks, 0);
+                    destinationsList = response.body().getDestinations();
+                    updateDestinationsList();
                 } else {
                     showEmptyState(true);
                 }
             }
 
             @Override
-            public void onFailure(retrofit2.Call<PassengerRanksResponse> call, Throwable t) {
+            public void onFailure(retrofit2.Call<PassengerRankDestinationsResponse> call, Throwable t) {
                 Toast.makeText(PassengerDashboardActivity.this, "Failed to load destinations", Toast.LENGTH_SHORT).show();
                 showEmptyState(true);
-            }
-        });
-    }
-
-    private void loadDestinationsForRanks(List<PassengerRanksResponse.Rank> ranks, int index) {
-        if (index >= ranks.size()) {
-            updateDestinationsList();
-            return;
-        }
-        passengerApi.getRankDestinations(ranks.get(index).getId()).enqueue(new retrofit2.Callback<PassengerRankDestinationsResponse>() {
-            @Override
-            public void onResponse(retrofit2.Call<PassengerRankDestinationsResponse> call, retrofit2.Response<PassengerRankDestinationsResponse> response) {
-                if (response.isSuccessful() && response.body() != null) {
-                    destinationsList.addAll(response.body().getDestinations());
-                }
-                loadDestinationsForRanks(ranks, index + 1);
-            }
-
-            @Override
-            public void onFailure(retrofit2.Call<PassengerRankDestinationsResponse> call, Throwable t) {
-                loadDestinationsForRanks(ranks, index + 1);
             }
         });
     }

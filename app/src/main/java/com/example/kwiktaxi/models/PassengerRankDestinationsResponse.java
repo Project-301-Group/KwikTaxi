@@ -3,26 +3,14 @@ package com.example.kwiktaxi.models;
 import java.util.List;
 
 public class PassengerRankDestinationsResponse {
-    private Rank rank;
     private List<Destination> destinations;
 
-    public Rank getRank() { return rank; }
     public List<Destination> getDestinations() { return destinations; }
-
-    public static class Rank {
-        private int id;
-        private String name;
-        private String city;
-        private String province;
-
-        public int getId() { return id; }
-        public String getName() { return name; }
-        public String getCity() { return city; }
-        public String getProvince() { return province; }
-    }
 
     public static class Destination {
         private int id;
+        private Integer origin_rank_id;
+        private String origin_rank_name;
         private String destination_rank_id;
         private String destination_name;
         private double distance_km;
@@ -31,6 +19,8 @@ public class PassengerRankDestinationsResponse {
         private boolean active;
 
         public int getId() { return id; }
+        public Integer getOrigin_rank_id() { return origin_rank_id; }
+        public String getOrigin_rank_name() { return origin_rank_name; }
         public String getDestination_rank_id() { return destination_rank_id; }
         public String getDestination_name() { return destination_name; }
         public double getDistance_km() { return distance_km; }

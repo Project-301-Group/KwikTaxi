@@ -64,7 +64,7 @@ public class PassengerTripsActivity extends AppCompatActivity {
             });
         } else {
             // For rank, load destinations first then trips
-            passengerApi.getRankDestinations(filterId).enqueue(new retrofit2.Callback<com.example.kwiktaxi.models.PassengerRankDestinationsResponse>() {
+            passengerApi.getRankDestinations(null, filterId).enqueue(new retrofit2.Callback<com.example.kwiktaxi.models.PassengerRankDestinationsResponse>() {
                 @Override
                 public void onResponse(retrofit2.Call<com.example.kwiktaxi.models.PassengerRankDestinationsResponse> call, retrofit2.Response<com.example.kwiktaxi.models.PassengerRankDestinationsResponse> response) {
                     if (response.isSuccessful() && response.body() != null && !response.body().getDestinations().isEmpty()) {
