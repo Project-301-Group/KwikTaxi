@@ -157,8 +157,38 @@ public class PassengerDashboardActivity extends AppCompatActivity {
             showEmptyState(filtered.isEmpty());
         } else {
             List<PassengerRankDestinationsResponse.Destination> filtered = new ArrayList<>();
+            String queryLower = query.toLowerCase();
             for (PassengerRankDestinationsResponse.Destination d : destinationsList) {
-                if (d.getDestination_name().toLowerCase().contains(query.toLowerCase())) {
+                boolean matches = false;
+                // Search origin rank name
+                if (d.getOrigin_rank() != null && d.getOrigin_rank().getName() != null &&
+                    d.getOrigin_rank().getName().toLowerCase().contains(queryLower)) {
+                    matches = true;
+                }
+                // Search destination rank name
+                if (!matches && d.getDestination_rank() != null && d.getDestination_rank().getName() != null &&
+                    d.getDestination_rank().getName().toLowerCase().contains(queryLower)) {
+                    matches = true;
+                }
+                // Search origin city/province
+                if (!matches && d.getOrigin_rank() != null) {
+                    if ((d.getOrigin_rank().getCity() != null && d.getOrigin_rank().getCity().toLowerCase().contains(queryLower)) ||
+                        (d.getOrigin_rank().getProvince() != null && d.getOrigin_rank().getProvince().toLowerCase().contains(queryLower))) {
+                        matches = true;
+                    }
+                }
+                // Search destination city/province
+                if (!matches && d.getDestination_rank() != null) {
+                    if ((d.getDestination_rank().getCity() != null && d.getDestination_rank().getCity().toLowerCase().contains(queryLower)) ||
+                        (d.getDestination_rank().getProvince() != null && d.getDestination_rank().getProvince().toLowerCase().contains(queryLower))) {
+                        matches = true;
+                    }
+                }
+                // Search fare or distance
+                if (!matches && (String.valueOf(d.getFare()).contains(query) || String.valueOf(d.getDistance_km()).contains(query))) {
+                    matches = true;
+                }
+                if (matches) {
                     filtered.add(d);
                 }
             }
