@@ -9,14 +9,21 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.kwiktaxi.models.PassengerTripsResponse;
+import com.google.android.material.button.MaterialButton;
 
 import java.util.List;
 
 public class PassengerTripsAdapter extends RecyclerView.Adapter<PassengerTripsAdapter.VH> {
-    private final List<PassengerTripsResponse.Trip> items;
+    public interface OnViewPassengersClick {
+        void onClick(int tripId);
+    }
 
-    public PassengerTripsAdapter(List<PassengerTripsResponse.Trip> items) {
+    private final List<PassengerTripsResponse.Trip> items;
+    private final OnViewPassengersClick onViewPassengersClick;
+
+    public PassengerTripsAdapter(List<PassengerTripsResponse.Trip> items, OnViewPassengersClick onViewPassengersClick) {
         this.items = items;
+        this.onViewPassengersClick = onViewPassengersClick;
     }
 
     @NonNull
@@ -67,6 +74,18 @@ public class PassengerTripsAdapter extends RecyclerView.Adapter<PassengerTripsAd
         
         // Status
         holder.tvStatus.setText("Status: " + (t.getStatus() != null ? t.getStatus() : "Unknown"));
+        
+        // View Passengers button - only show for active trips
+        if ("active".equalsIgnoreCase(t.getStatus())) {
+            holder.btnViewPassengers.setVisibility(View.VISIBLE);
+            holder.btnViewPassengers.setOnClickListener(v -> {
+                if (onViewPassengersClick != null) {
+                    onViewPassengersClick.onClick(t.getTrip_id());
+                }
+            });
+        } else {
+            holder.btnViewPassengers.setVisibility(View.GONE);
+        }
     }
 
     @Override
@@ -74,6 +93,7 @@ public class PassengerTripsAdapter extends RecyclerView.Adapter<PassengerTripsAd
 
     static class VH extends RecyclerView.ViewHolder {
         TextView tvDestination, tvTaxi, tvFare, tvStatus, tvDistance, tvDuration, tvDriver, tvDriverPhone;
+        MaterialButton btnViewPassengers;
         VH(@NonNull View itemView) {
             super(itemView);
             tvDestination = itemView.findViewById(R.id.tvDestination);
@@ -84,6 +104,7 @@ public class PassengerTripsAdapter extends RecyclerView.Adapter<PassengerTripsAd
             tvDuration = itemView.findViewById(R.id.tvDuration);
             tvDriver = itemView.findViewById(R.id.tvDriver);
             tvDriverPhone = itemView.findViewById(R.id.tvDriverPhone);
+            btnViewPassengers = itemView.findViewById(R.id.btnViewPassengers);
         }
     }
 }

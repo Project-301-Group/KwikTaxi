@@ -52,7 +52,7 @@ public class PassengerTripsActivity extends AppCompatActivity {
                 @Override
                 public void onResponse(retrofit2.Call<PassengerTripsResponse> call, retrofit2.Response<PassengerTripsResponse> response) {
                     if (response.isSuccessful() && response.body() != null) {
-                        rvTrips.setAdapter(new PassengerTripsAdapter(response.body().getTrips()));
+                        rvTrips.setAdapter(new PassengerTripsAdapter(response.body().getTrips(), tripId -> openTripPassengerFragment(tripId)));
                         showEmptyState(response.body().getTrips().isEmpty());
                     } else {
                         showEmptyState(true);
@@ -70,7 +70,7 @@ public class PassengerTripsActivity extends AppCompatActivity {
                 @Override
                 public void onResponse(retrofit2.Call<PassengerTripsResponse> call, retrofit2.Response<PassengerTripsResponse> response) {
                     if (response.isSuccessful() && response.body() != null) {
-                        rvTrips.setAdapter(new PassengerTripsAdapter(response.body().getTrips()));
+                        rvTrips.setAdapter(new PassengerTripsAdapter(response.body().getTrips(), tripId -> openTripPassengerFragment(tripId)));
                         showEmptyState(response.body().getTrips().isEmpty());
                     } else {
                         showEmptyState(true);
@@ -122,6 +122,11 @@ public class PassengerTripsActivity extends AppCompatActivity {
     private void showEmptyState(boolean show) {
         tvEmptyState.setVisibility(show ? View.VISIBLE : View.GONE);
         rvTrips.setVisibility(show ? View.GONE : View.VISIBLE);
+    }
+
+    private void openTripPassengerFragment(int tripId) {
+        TripPassengerCountFragment fragment = TripPassengerCountFragment.newInstance(tripId);
+        fragment.show(getSupportFragmentManager(), "trip_passenger_count");
     }
 }
 
