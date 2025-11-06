@@ -35,7 +35,7 @@ public interface PassengerApi {
     Call<PassengerInfoResponse> getPassengerInfo(@Query("user_id") int userId);
 
     // 7 Get passenger's trip list
-    @GET("passenger/trips")
+    @GET("passenger/trips/target")
     Call<PassengerTripsResponse> getPassengerTrips(@Query("user_id") int userId);
 }
 
