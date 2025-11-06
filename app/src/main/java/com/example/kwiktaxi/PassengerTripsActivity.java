@@ -21,6 +21,7 @@ public class PassengerTripsActivity extends AppCompatActivity {
     private PassengerApi passengerApi;
     private String filterType;
     private Integer filterId;
+    private Integer userId;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -32,6 +33,8 @@ public class PassengerTripsActivity extends AppCompatActivity {
             filterId = getIntent().getIntExtra("rank_id", -1);
         } else if ("destination".equals(filterType)) {
             filterId = getIntent().getIntExtra("rank_destination_id", -1);
+        } else if ("history".equals(filterType)) {
+            userId = getIntent().getIntExtra("user_id", -1);
         }
 
         rvTrips = findViewById(R.id.rvTrips);
@@ -44,7 +47,25 @@ public class PassengerTripsActivity extends AppCompatActivity {
     }
 
     private void loadTrips() {
-        if ("destination".equals(filterType)) {
+        if ("history".equals(filterType)) {
+            passengerApi.getPassengerTrips(userId).enqueue(new retrofit2.Callback<PassengerTripsResponse>() {
+                @Override
+                public void onResponse(retrofit2.Call<PassengerTripsResponse> call, retrofit2.Response<PassengerTripsResponse> response) {
+                    if (response.isSuccessful() && response.body() != null) {
+                        rvTrips.setAdapter(new PassengerTripsAdapter(response.body().getTrips()));
+                        showEmptyState(response.body().getTrips().isEmpty());
+                    } else {
+                        showEmptyState(true);
+                    }
+                }
+
+                @Override
+                public void onFailure(retrofit2.Call<PassengerTripsResponse> call, Throwable t) {
+                    Toast.makeText(PassengerTripsActivity.this, "Failed to load trips", Toast.LENGTH_SHORT).show();
+                    showEmptyState(true);
+                }
+            });
+        } else if ("destination".equals(filterType)) {
             passengerApi.getFilteredTrips(null, filterId).enqueue(new retrofit2.Callback<PassengerTripsResponse>() {
                 @Override
                 public void onResponse(retrofit2.Call<PassengerTripsResponse> call, retrofit2.Response<PassengerTripsResponse> response) {

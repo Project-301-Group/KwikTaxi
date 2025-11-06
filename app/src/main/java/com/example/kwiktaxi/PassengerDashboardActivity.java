@@ -15,6 +15,7 @@ import com.example.kwiktaxi.models.PassengerRanksResponse;
 import com.example.kwiktaxi.models.PassengerRankDestinationsResponse;
 import com.example.kwiktaxi.network.PassengerApi;
 import com.example.kwiktaxi.network.RetrofitClient;
+import com.example.kwiktaxi.models.PassengerInfoResponse;
 import com.example.kwiktaxi.utils.AuthManager;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.tabs.TabLayout;
@@ -31,6 +32,8 @@ public class PassengerDashboardActivity extends AppCompatActivity {
     private RecyclerView rvList;
     private MaterialTextView tvEmptyState;
     private MaterialButton btnLogout, btnScanQr;
+    private MaterialTextView tvPassengerName, tvPassengerPhone, tvPassengerAddress, tvTripCount;
+    private android.widget.ImageButton btnTripHistory;
     private AuthManager authManager;
     private PassengerApi passengerApi;
 
@@ -56,16 +59,25 @@ public class PassengerDashboardActivity extends AppCompatActivity {
         tvEmptyState = findViewById(R.id.tvEmptyState);
         btnLogout = findViewById(R.id.btnLogout);
         btnScanQr = findViewById(R.id.btnScanQr);
+        tvPassengerName = findViewById(R.id.tvPassengerName);
+        tvPassengerPhone = findViewById(R.id.tvPassengerPhone);
+        tvPassengerAddress = findViewById(R.id.tvPassengerAddress);
+        tvTripCount = findViewById(R.id.tvTripCount);
+        btnTripHistory = findViewById(R.id.btnTripHistory);
 
         authManager = new AuthManager(this);
         passengerApi = RetrofitClient.getInstance().getPassengerApi();
 
         rvList.setLayoutManager(new LinearLayoutManager(this));
+
+        // Load passenger personal info and trip count
+        loadPassengerInfo();
     }
 
     private void setupClickListeners() {
         btnLogout.setOnClickListener(v -> performLogout());
         btnScanQr.setOnClickListener(v -> openQrScanner());
+        btnTripHistory.setOnClickListener(v -> openTripHistory());
 
         etSearch.addTextChangedListener(new TextWatcher() {
             @Override
@@ -79,6 +91,38 @@ public class PassengerDashboardActivity extends AppCompatActivity {
             @Override
             public void afterTextChanged(Editable s) {}
         });
+    }
+
+    private void loadPassengerInfo() {
+        int userId = authManager.getUserId();
+        if (userId <= 0) {
+            return;
+        }
+        passengerApi.getPassengerInfo(userId).enqueue(new retrofit2.Callback<PassengerInfoResponse>() {
+            @Override
+            public void onResponse(retrofit2.Call<PassengerInfoResponse> call, retrofit2.Response<PassengerInfoResponse> response) {
+                if (response.isSuccessful() && response.body() != null && response.body().getPassenger() != null) {
+                    PassengerInfoResponse.Passenger p = response.body().getPassenger();
+                    String fullName = (p.getFirstname() != null ? p.getFirstname() : "") +
+                            (p.getLastname() != null ? (p.getFirstname() != null ? " " : "") + p.getLastname() : "");
+                    tvPassengerName.setText(fullName.trim());
+                    tvPassengerPhone.setText(p.getPhone() == null ? "" : p.getPhone());
+                    tvPassengerAddress.setText(p.getAddress() == null ? "" : p.getAddress());
+                    int count = response.body().getTrip_count();
+                    tvTripCount.setText(count + (count == 1 ? " trip" : " trips"));
+                }
+            }
+
+            @Override
+            public void onFailure(retrofit2.Call<PassengerInfoResponse> call, Throwable t) { }
+        });
+    }
+
+    private void openTripHistory() {
+        Intent intent = new Intent(this, PassengerTripsActivity.class);
+        intent.putExtra("filter_type", "history");
+        intent.putExtra("user_id", authManager.getUserId());
+        startActivity(intent);
     }
 
     private void setupTabs() {

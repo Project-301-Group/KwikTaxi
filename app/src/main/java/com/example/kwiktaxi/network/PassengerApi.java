@@ -5,6 +5,7 @@ import com.example.kwiktaxi.models.PassengerTripsResponse;
 import com.example.kwiktaxi.models.PassengerRankDestinationsResponse;
 import com.example.kwiktaxi.models.PassengerJoinTripRequest;
 import com.example.kwiktaxi.models.PassengerJoinTripResponse;
+import com.example.kwiktaxi.models.PassengerInfoResponse;
 
 import retrofit2.Call;
 import retrofit2.http.Body;
@@ -28,5 +29,13 @@ public interface PassengerApi {
 
     @POST("passenger/trip/join")
     Call<PassengerJoinTripResponse> joinTrip(@Body PassengerJoinTripRequest request);
+
+    // 6 Get passenger info with trip count
+    @GET("passenger/info")
+    Call<PassengerInfoResponse> getPassengerInfo(@Query("user_id") int userId);
+
+    // 7 Get passenger's trip list
+    @GET("passenger/trips")
+    Call<PassengerTripsResponse> getPassengerTrips(@Query("user_id") int userId);
 }
 
