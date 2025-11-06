@@ -94,7 +94,7 @@ public class PassengerTripsActivity extends AppCompatActivity {
                             @Override
                             public void onResponse(retrofit2.Call<PassengerTripsResponse> call, retrofit2.Response<PassengerTripsResponse> response) {
                                 if (response.isSuccessful() && response.body() != null) {
-                                    rvTrips.setAdapter(new PassengerTripsAdapter(response.body().getTrips()));
+                                    rvTrips.setAdapter(new PassengerTripsAdapter(response.body().getTrips(), tripId -> openTripPassengerFragment(tripId)));
                                     showEmptyState(response.body().getTrips().isEmpty());
                                 } else {
                                     showEmptyState(true);
