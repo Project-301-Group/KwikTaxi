@@ -22,7 +22,7 @@ public class ActiveTripsPassengerCountAdapter extends RecyclerView.Adapter<Activ
     @NonNull
     @Override
     public VH onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_active_trip, parent, false);
+        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_active_trip_passenger_count, parent, false);
         return new VH(v);
     }
 
