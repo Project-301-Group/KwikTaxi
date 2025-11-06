@@ -28,7 +28,10 @@ public interface PassengerApi {
     Call<PassengerRankDestinationsResponse> getRankDestinations(@Query("search") String search, @Query("rank_id") Integer rankId);
 
     @GET("passenger/trips/filter")
-    Call<PassengerTripsResponse> getFilteredTrips(@Query("taxi_id") Integer taxiId, @Query("rank_destination_id") Integer rankDestinationId);
+    Call<PassengerTripsResponse> getTripsByTaxi(@Query("rank_id") Integer rankId);
+
+    @GET("passenger/trips/filter")
+    Call<PassengerTripsResponse> getTripsByDestination(@Query("rank_destination_id") Integer destinationId);
 
     @POST("passenger/trip/join")
     Call<PassengerJoinTripResponse> joinTrip(@Body PassengerJoinTripRequest request);

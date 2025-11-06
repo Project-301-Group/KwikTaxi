@@ -48,6 +48,7 @@ public class PassengerTripsActivity extends AppCompatActivity {
 
     private void loadTrips() {
         if ("history".equals(filterType)) {
+            // 1️⃣ Passenger trip history
             passengerApi.getPassengerTrips(userId).enqueue(new retrofit2.Callback<PassengerTripsResponse>() {
                 @Override
                 public void onResponse(retrofit2.Call<PassengerTripsResponse> call, retrofit2.Response<PassengerTripsResponse> response) {
@@ -65,8 +66,11 @@ public class PassengerTripsActivity extends AppCompatActivity {
                     showEmptyState(true);
                 }
             });
-        } else if ("destination".equals(filterType)) {
-            passengerApi.getFilteredTrips(null, filterId).enqueue(new retrofit2.Callback<PassengerTripsResponse>() {
+        }
+
+        else if ("destination".equals(filterType)) {
+            // 2️⃣ Trips filtered by destination
+            passengerApi.getTripsByDestination(filterId).enqueue(new retrofit2.Callback<PassengerTripsResponse>() {
                 @Override
                 public void onResponse(retrofit2.Call<PassengerTripsResponse> call, retrofit2.Response<PassengerTripsResponse> response) {
                     if (response.isSuccessful() && response.body() != null) {
@@ -83,14 +87,17 @@ public class PassengerTripsActivity extends AppCompatActivity {
                     showEmptyState(true);
                 }
             });
-        } else {
-            // For rank, load destinations first then trips
+        }
+
+        else if ("rank".equals(filterType)) {
+            // 3️⃣ Trips filtered by rank (load rank destinations first)
             passengerApi.getRankDestinations(null, filterId).enqueue(new retrofit2.Callback<com.example.kwiktaxi.models.PassengerRankDestinationsResponse>() {
                 @Override
-                public void onResponse(retrofit2.Call<com.example.kwiktaxi.models.PassengerRankDestinationsResponse> call, retrofit2.Response<com.example.kwiktaxi.models.PassengerRankDestinationsResponse> response) {
+                public void onResponse(retrofit2.Call<com.example.kwiktaxi.models.PassengerRankDestinationsResponse> call,
+                                       retrofit2.Response<com.example.kwiktaxi.models.PassengerRankDestinationsResponse> response) {
                     if (response.isSuccessful() && response.body() != null && !response.body().getDestinations().isEmpty()) {
                         int destId = response.body().getDestinations().get(0).getId();
-                        passengerApi.getFilteredTrips(null, destId).enqueue(new retrofit2.Callback<PassengerTripsResponse>() {
+                        passengerApi.getTripsByTaxi(filterId).enqueue(new retrofit2.Callback<PassengerTripsResponse>() {
                             @Override
                             public void onResponse(retrofit2.Call<PassengerTripsResponse> call, retrofit2.Response<PassengerTripsResponse> response) {
                                 if (response.isSuccessful() && response.body() != null) {
@@ -103,6 +110,7 @@ public class PassengerTripsActivity extends AppCompatActivity {
 
                             @Override
                             public void onFailure(retrofit2.Call<PassengerTripsResponse> call, Throwable t) {
+                                Toast.makeText(PassengerTripsActivity.this, "Failed to load trips", Toast.LENGTH_SHORT).show();
                                 showEmptyState(true);
                             }
                         });
@@ -113,11 +121,13 @@ public class PassengerTripsActivity extends AppCompatActivity {
 
                 @Override
                 public void onFailure(retrofit2.Call<com.example.kwiktaxi.models.PassengerRankDestinationsResponse> call, Throwable t) {
+                    Toast.makeText(PassengerTripsActivity.this, "Failed to load destinations", Toast.LENGTH_SHORT).show();
                     showEmptyState(true);
                 }
             });
         }
     }
+
 
     private void showEmptyState(boolean show) {
         tvEmptyState.setVisibility(show ? View.VISIBLE : View.GONE);
