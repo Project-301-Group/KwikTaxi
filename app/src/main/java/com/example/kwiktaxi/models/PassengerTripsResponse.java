@@ -12,11 +12,13 @@ public class PassengerTripsResponse {
         private String status;
         private RankDestination rank_destination;
         private Taxi taxi;
+        private Driver driver;
 
         public int getTrip_id() { return trip_id; }
         public String getStatus() { return status; }
         public RankDestination getRank_destination() { return rank_destination; }
         public Taxi getTaxi() { return taxi; }
+        public Driver getDriver() { return driver; }
     }
 
     public static class RankDestination {
@@ -39,6 +41,16 @@ public class PassengerTripsResponse {
 
         public Integer getId() { return id; }
         public String getRegistration_number() { return registration_number; }
+    }
+
+    public static class Driver {
+        private Integer id;
+        private String name;
+        private String phone_number;
+
+        public Integer getId() { return id; }
+        public String getName() { return name; }
+        public String getPhone_number() { return phone_number; }
     }
 }
 

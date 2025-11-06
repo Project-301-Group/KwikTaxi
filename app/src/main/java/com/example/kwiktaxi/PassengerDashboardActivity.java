@@ -31,7 +31,7 @@ public class PassengerDashboardActivity extends AppCompatActivity {
     private TextInputEditText etSearch;
     private RecyclerView rvList;
     private MaterialTextView tvEmptyState;
-    private MaterialButton btnLogout, btnScanQr;
+    private MaterialButton btnLogout, btnScanQr, btnActiveTrips;
     private MaterialTextView tvPassengerName, tvPassengerPhone, tvPassengerAddress, tvTripCount;
     private android.widget.ImageButton btnTripHistory;
     private AuthManager authManager;
@@ -59,6 +59,7 @@ public class PassengerDashboardActivity extends AppCompatActivity {
         tvEmptyState = findViewById(R.id.tvEmptyState);
         btnLogout = findViewById(R.id.btnLogout);
         btnScanQr = findViewById(R.id.btnScanQr);
+        btnActiveTrips = findViewById(R.id.btnActiveTrips);
         tvPassengerName = findViewById(R.id.tvPassengerName);
         tvPassengerPhone = findViewById(R.id.tvPassengerPhone);
         tvPassengerAddress = findViewById(R.id.tvPassengerAddress);
@@ -78,6 +79,7 @@ public class PassengerDashboardActivity extends AppCompatActivity {
         btnLogout.setOnClickListener(v -> performLogout());
         btnScanQr.setOnClickListener(v -> openQrScanner());
         btnTripHistory.setOnClickListener(v -> openTripHistory());
+        btnActiveTrips.setOnClickListener(v -> openActiveTrips());
 
         etSearch.addTextChangedListener(new TextWatcher() {
             @Override
@@ -123,6 +125,11 @@ public class PassengerDashboardActivity extends AppCompatActivity {
         intent.putExtra("filter_type", "history");
         intent.putExtra("user_id", authManager.getUserId());
         startActivity(intent);
+    }
+
+    private void openActiveTrips() {
+        ActiveTripsFragment fragment = ActiveTripsFragment.newInstance();
+        fragment.show(getSupportFragmentManager(), "active_trips");
     }
 
     private void setupTabs() {
