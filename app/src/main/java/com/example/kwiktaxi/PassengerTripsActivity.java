@@ -48,7 +48,7 @@ public class PassengerTripsActivity extends AppCompatActivity {
 
     private void loadTrips() {
         if ("history".equals(filterType)) {
-            // 1️⃣ Passenger trip history
+             // 1️⃣ Passenger trip history
             passengerApi.getPassengerTrips(userId).enqueue(new retrofit2.Callback<PassengerTripsResponse>() {
                 @Override
                 public void onResponse(retrofit2.Call<PassengerTripsResponse> call, retrofit2.Response<PassengerTripsResponse> response) {
